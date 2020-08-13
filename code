@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Typing Twisters</title>
+
+  <!-- jsPsych and plugin modules -->
+  <script src="../js/jsPsych-6.1.0/jspsych.js"></script>
+  <script src="../js/jsPsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="../js/jsPsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
+  <script src="../js/jsPsych-6.1.0/plugins/jspsych-survey-text.js"></script>
+  <script src="../js/jsPsych-6.1.0/plugins/jspsych-survey-likert.js"></script>
+  <script src="../js/jsPsych-6.1.0/plugins/jspsych-survey-multi-choice.js"></script>  
+  <script src="../js/jsPsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
+  <script src="../js/jsPsych-6.1.0/plugins/jspsych-external-html.js"></script>
+  <script src="../js/jsPsych-6.1.0/plugins/jspsych-instructions.js"></script>
+
+  <!-- local javascript (jsPsych module) -->
+  <script src= "js_local/jspsych-survey-text-keylog.js"></script>
+
+  <!-- jsPsych default CSS -->
+  <link href="../js/jsPsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <!-- experiment is rendered here -->
+</body>
+<script>
+  ////////////////////////////////////////////////////////////////////
+  // This is a minimal example to try and work out the experimental
+  // structure for TT.  Instructions, etc., can be added from the
+  // original TT.html once we've got this bit sorted properly!
+  //
+  // This is based on https://www.jspsych.org/tutorials/rt-task/
+  // and other jsPsych documentation.
+  ////////////////////////////////////////////////////////////////////
+
+  // SETUP (timeline, variables, and useful functions)
+  ////////////////////////////////////////////////////////////////////
+  
+  // function to save data (works in conjunction with write_data.php)
+  function saveData(name, data){
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'write_data.php'); // 'write_data.php' is the path to the php file described above.
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify({filename: name, filedata: data}));
+  }
+
+  // set up the timeline
+  var timeline = [];
+  // we want to go fullscreen first thing, so add the appropriate call
+  // to timeline
+  var fullscreen = {
+      type: 'fullscreen',
+      fullscreen_mode: true
+  }
+
+  var offscreen = {
+      type: 'fullscreen',
+      fullscreen_mode: false
+  }
+
+  // set up subject ID (15 char)
+  var subject_id = jsPsych.randomization.randomID(15);
+  
+  // assign experimental group 1-4 randomly (see https://www.w3schools.com/js/js_random.asp) 
+  var group = Math.floor(Math.random() * 4) + 1;
+   
+  // ensure that this data is recorded
+  jsPsych.data.addProperties({
+      subject: subject_id,
+      group: group
+  });
+      
+  // set up the test stimuli (see below for how they're used)
+  ///////////////////////////////////////////////////////////////////
+
+  var practice_stimuli = [
+      {stimulus: 'five tide type fine', data: {cond: 'PRAC', stimulus: 'five tide type fine'}},
+      {stimulus: 'hop dog ditch heap', data: {cond: 'PRAC', stimulus: 'hop dog ditch heap'}}
+  ]
+  
+  var test_stimuli = [
+
+      [
+	  // GROUP 1
+	  {stimulus: 'cow bill bat cap', data: {cond: 'PC-WO', stimulus: 'cow bill bat cap'}},
+	  {stimulus: 'rib mess mad rag', data: {cond: 'PC-WO', stimulus: 'rib mess mad rag'}},
+	  {stimulus: 'bond sum sat bag', data: {cond: 'PC-WO', stimulus: 'bond sum sat bag'}},
+	  {stimulus: 'pry hem hat pan', data: {cond: 'PC-WO', stimulus: 'pry hem hat pan'}},
+	  {stimulus: 'few bud ban fat', data: {cond: 'PC-WO', stimulus: 'few bud ban fat'}},
+	  {stimulus: 'bun way wet bed', data: {cond: 'PC-WO', stimulus: 'bun way wet bed'}},
+	  {stimulus: 'him rave rob hot', data: {cond: 'PC-NW', stimulus: 'him rave rob hot'}},
+	  {stimulus: 'tank fed fig tip', data: {cond: 'PC-NW', stimulus: 'tank fed fig tip'}},
+	  {stimulus: 'ray pull pet red', data: {cond: 'PC-NW', stimulus: 'ray pull pet red'}},
+	  {stimulus: 'gas pro pen get', data: {cond: 'PC-NW', stimulus: 'gas pro pen get'}},
+	  {stimulus: 'ten hill ham tab', data: {cond: 'PC-NW', stimulus: 'ten hill ham tab'}},
+	  {stimulus: 'bird tuck tool boom', data: {cond: 'PC-NW', stimulus: 'bird tuck tool boom'}},
+	  {stimulus: 'pit hung hood poor', data: {cond: 'PC-NW', stimulus: 'pit hung hood poor'}},
+	  {stimulus: 'try long like time', data: {cond: 'PC-WO', stimulus: 'try long like time'}},
+	  {stimulus: 'push bot bike pile', data: {cond: 'PC-NW', stimulus: 'push bot bike pile'}},
+	  {stimulus: 'mug root rice mike', data: {cond: 'PC-WO', stimulus: 'mug root rice mike'}},
+	  {stimulus: 'weep surf sole woke', data: {cond: 'PC-NW', stimulus: 'weep surf sole woke'}},
+	  {stimulus: 'sub toy tile sine', data: {cond: 'PC-NW', stimulus: 'sub toy tile sine'}},
+	  {stimulus: 'run mat mole rose', data: {cond: 'PC-WO', stimulus: 'run mat mole rose'}},
+	  {stimulus: 'low rush rite lice', data: {cond: 'PC-WO', stimulus: 'low rush rite lice'}},
+	  {stimulus: 'past rung rode poke', data: {cond: 'PC-NW', stimulus: 'past rung rode poke'}},
+	  {stimulus: 'bull mix mode bone', data: {cond: 'PC-NW', stimulus: 'bull mix mode bone'}},
+	  {stimulus: 'ball dorm deck bust', data: {cond: 'PX-NW', stimulus: 'ball dorm deck bust'}},
+	  {stimulus: 'rum dock dash ring', data: {cond: 'PX-WO', stimulus: 'rum dock dash ring'}},
+	  {stimulus: 'fun peg pack fist', data: {cond: 'PX-NW', stimulus: 'fun peg pack fist'}},
+	  {stimulus: 'day meek mist dull', data: {cond: 'PX-NW', stimulus: 'day meek mist dull'}},
+	  {stimulus: 'fry bang beet fool', data: {cond: 'PX-WO', stimulus: 'fry bang beet fool'}},
+	  {stimulus: 'pig dawn deem pool', data: {cond: 'PX-NW', stimulus: 'pig dawn deem pool'}},
+	  {stimulus: 'sip fax feed soon', data: {cond: 'PX-WO', stimulus: 'sip fax feed soon'}},
+	  {stimulus: 'lump fawn feet look', data: {cond: 'PX-WO', stimulus: 'lump fawn feet look'}},
+	  {stimulus: 'may rid reef moot', data: {cond: 'PX-NW', stimulus: 'may rid reef moot'}},
+	  {stimulus: 'less bye bait loud', data: {cond: 'PX-WO', stimulus: 'less bye bait loud'}},
+	  {stimulus: 'lush mitt mean loop', data: {cond: 'PX-WO', stimulus: 'lush mitt mean loop'}},
+	  {stimulus: 'bad nip nut beg', data: {cond: 'PX-WO', stimulus: 'bad nip nut beg'}},
+	  {stimulus: 'hold tug tin hap', data: {cond: 'PX-NW', stimulus: 'hold tug tin hap'}},
+	  {stimulus: 'cut milk mop cab', data: {cond: 'PX-WO', stimulus: 'cut milk mop cab'}},
+	  {stimulus: 'cry pug pod cat', data: {cond: 'PX-WO', stimulus: 'cry pug pod cat'}},
+	  {stimulus: 'dew lap lot dig', data: {cond: 'PX-WO', stimulus: 'dew lap lot dig'}},
+	  {stimulus: 'fuzz howl his fan', data: {cond: 'PX-NW', stimulus: 'fuzz howl his fan'}},
+	  {stimulus: 'let curb con lag', data: {cond: 'PX-WO', stimulus: 'let curb con lag'}},
+	  {stimulus: 'week fur fill wash', data: {cond: 'PX-WO', stimulus: 'week fur fill wash'}},
+	  {stimulus: 'lid men moth lack', data: {cond: 'PX-NW', stimulus: 'lid men moth lack'}},
+	  {stimulus: 'man set suck mill', data: {cond: 'PX-WO', stimulus: 'man set suck mill'}},
+	  {stimulus: 'born leg lust back', data: {cond: 'PX-WO', stimulus: 'born leg lust back'}},
+      ],
+
+      [
+	  // GROUP 2
+	  {stimulus:  'bad nip net beg', data: {cond: 'PC-WO', stimulus:  'bad nip net beg'}},
+	  {stimulus: 'hold tug tan hap',data: {cond: 'PC-NW', stimulus: 'hold tug tan hap'}},
+	  {stimulus: 'cut milk map cab', data: {cond: 'PC-WO', stimulus: 'cut milk map cab'}},
+	  {stimulus: 'cry pug pad cat',  data: {cond: 'PC-WO', stimulus: 'cry pug pad cat'}},
+	  {stimulus: 'dew lap lit dig', data: {cond: 'PC-NW', stimulus: 'dew lap lit dig'}},
+	  {stimulus: 'fuzz howl has fan', data: {cond: 'PC-NW', stimulus: 'fuzz howl has fan'}},
+	  {stimulus: 'let curb can lag', data: {cond: 'PC-NW', stimulus: 'let curb can lag'}},
+	  {stimulus: 'week fur fall wash', data: {cond: 'PC-WO', stimulus: 'week fur fall wash'}},
+	  {stimulus: 'lid men math lack', data: {cond: 'PC-NW', stimulus: 'lid men math lack'}},
+	  {stimulus: 'man set sick mill', data: {cond: 'PC-NW', stimulus: 'man set sick mill'}},
+	  {stimulus: 'born leg last back', data: {cond: 'PC-NW', stimulus: 'born leg last back'}},
+	  {stimulus: 'cow bill but cup',  data: {cond: 'PC-WO', stimulus: 'cow bill but cup'}},
+	  {stimulus: 'rib mess mud rug',  data: {cond: 'PC-NW', stimulus: 'rib mess mud rug'}},
+	  {stimulus: 'bond sum sit big', data: {cond: 'PC-WO', stimulus: 'bond sum sit big'}},
+	  {stimulus: 'pry hem hit pin', data: {cond: 'PC-WO', stimulus: 'pry hem hit pin'}},
+	  {stimulus: 'few bud bin fit', data: {cond: 'PC-WO', stimulus: 'few bud bin fit'}},
+	  {stimulus: 'bun way wit bid',  data: {cond: 'PC-WO', stimulus: 'bun way wit bid'}},
+	  {stimulus: 'him rave rub hut',  data: {cond: 'PC-WO', stimulus: 'him rave rub hut'}},
+	  {stimulus: 'tank fed fog top',  data: {cond: 'PC-NW', stimulus: 'tank fed fog top'}},
+	  {stimulus: 'ray pull pot rod',  data: {cond: 'PC-WO', stimulus: 'ray pull pot rod'}},
+	  {stimulus: 'gas pro pun gut',  data: {cond: 'PC-WO', stimulus: 'gas pro pun gut'}},
+	  {stimulus: 'ten hill hum tub',  data: {cond: 'PC-NW', stimulus: 'ten hill hum tub'}},
+	  {stimulus: 'bird tuck teal boom',  data: {cond: 'PX-NW', stimulus: 'bird tuck teal boom'}},
+	  {stimulus: 'pit hung head poor', data: {cond: 'PX-NW', stimulus: 'pit hung head poor'}},
+	  {stimulus: 'try long lake time', data: {cond: 'PX-WO', stimulus: 'try long lake time'}},
+	  {stimulus: 'push bot bake pile', data: {cond: 'PX-NW', stimulus: 'push bot bake pile'}},
+	  {stimulus: 'mug root race mike',  data: {cond: 'PX-WO', stimulus: 'mug root race mike'}},
+	  {stimulus: 'weep surf sale woke',  data: {cond: 'PX-WO', stimulus: 'weep surf sale woke'}},
+	  {stimulus: 'sub toy tale sine', data: {cond: 'PX-WO', stimulus: 'sub toy tale sine'}},
+	  {stimulus: 'run mat mile rose',  data: {cond: 'PX-WO', stimulus: 'run mat mile rose'}},
+	  {stimulus: 'low rush rate lice',  data: {cond: 'PX-WO', stimulus: 'low rush rate lice'}},
+	  {stimulus: 'past rung ride poke',  data: {cond: 'PX-NW', stimulus: 'past rung ride poke'}},
+	  {stimulus: 'bull mix made bone',  data: {cond: 'PX-WO', stimulus: 'bull mix made bone'}},
+	  {stimulus: 'ball dorm duck best',  data: {cond: 'PX-WO', stimulus: 'ball dorm duck best'}},
+	  {stimulus: 'rum dock dish rang', data: {cond: 'PX-NW', stimulus: 'rum dock dish rang'}},
+	  {stimulus: 'fun peg pick fast',  data: {cond: 'PX-NW', stimulus: 'fun peg pick fast'}},
+	  {stimulus: 'day meek must dill',  data: {cond: 'PX-WO', stimulus: 'day meek must dill'}},
+	  {stimulus: 'fry bang boot feel',  data: {cond: 'PX-NW', stimulus: 'fry bang boot feel'}},
+	  {stimulus: 'pig dawn doom peel',  data: {cond: 'PX-NW', stimulus: 'pig dawn doom peel'}},
+	  {stimulus: 'sip fax food seen',  data: {cond: 'PX-NW', stimulus: 'sip fax food seen'}},
+	  {stimulus: 'lump fawn foot leek',  data: {cond: 'PX-NW', stimulus: 'lump fawn foot leek'}},
+	  {stimulus: 'may rid roof meet',  data: {cond: 'PX-NW', stimulus: 'may rid roof meet'}},
+	  {stimulus: 'less bye bout laid',  data: {cond: 'PX-NW', stimulus: 'less bye bout laid'}},
+	  {stimulus: 'lush mitt moon leap', data: {cond: 'PX-NW', stimulus: 'lush mitt moon leap'}},
+      ],
+
+      [
+	  // GROUP 3
+	  {stimulus: 'ball dorm deck best', data: {cond: 'PC-NW', stimulus: 'ball dorm deck best'}},
+	  {stimulus: 'rum dock dash rang', data: {cond: 'PC-WO', stimulus: 'rum dock dash rang'}},
+	  {stimulus: 'fun peg pack fast', data: {cond: 'PC-NW', stimulus: 'fun peg pack fast'}},
+	  {stimulus: 'day meek mist dill', data: {cond: 'PC-NW', stimulus: 'day meek mist dill'}},
+	  {stimulus: 'fry bang beet feel', data: {cond: 'PC-WO', stimulus: 'fry bang beet feel'}},
+	  {stimulus: 'pig dawn deem peel', data: {cond: 'PC-NW', stimulus: 'pig dawn deem peel'}},
+	  {stimulus: 'sip fax feed seen', data: {cond: 'PC-WO', stimulus: 'sip fax feed seen'}},
+	  {stimulus: 'lump fawn feet leek', data: {cond: 'PC-NW', stimulus: 'lump fawn feet leek'}},
+	  {stimulus: 'may rid reef meet', data: {cond: 'PC-NW', stimulus: 'may rid reef meet'}},
+	  {stimulus: 'less bye bait laid', data: {cond: 'PC-WO', stimulus: 'less bye bait laid'}},
+	  {stimulus: 'lush mitt mean leap', data: {cond: 'PC-WO', stimulus: 'lush mitt mean leap'}},
+	  {stimulus: 'bad nip nut bug', data: {cond: 'PC-WO', stimulus: 'bad nip nut bug'}},
+	  {stimulus: 'hold tug tin hip', data: {cond: 'PC-NW', stimulus: 'hold tug tin hip'}},
+	  {stimulus: 'cut milk mop cob', data: {cond: 'PC-WO', stimulus: 'cut milk mop cob'}},
+	  {stimulus: 'cry pug pod cot', data: {cond: 'PC-WO', stimulus: 'cry pug pod cot'}},
+	  {stimulus: 'dew lap lot dog', data: {cond: 'PC-WO', stimulus: 'dew lap lot dog'}},
+	  {stimulus: 'fuzz howl his fin', data: {cond: 'PC-NW', stimulus: 'fuzz howl his fin'}},
+	  {stimulus: 'let curb con log', data: {cond: 'PC-WO', stimulus: 'let curb con log'}},
+	  {stimulus: 'week fur fill wish', data: {cond: 'PC-WO', stimulus: 'week fur fill wish'}},
+	  {stimulus: 'lid men moth lock',  data: {cond: 'PC-NW', stimulus: 'lid men moth lock'}},
+	  {stimulus: 'man set suck mull', data: {cond: 'PC-WO', stimulus: 'man set suck mull'}},
+	  {stimulus: 'born leg lust buck', data: {cond: 'PC-WO', stimulus: 'born leg lust buck'}},
+	  {stimulus: 'cow bill bat cup', data: {cond: 'PX-WO', stimulus: 'cow bill bat cup'}},
+	  {stimulus: 'rib mess mad rug', data: {cond: 'PX-WO', stimulus: 'rib mess mad rug'}},
+	  {stimulus: 'bond sum sat big', data: {cond: 'PX-WO', stimulus: 'bond sum sat big'}},
+	  {stimulus: 'pry hem hat pin',  data: {cond: 'PX-WO', stimulus: 'pry hem hat pin'}},
+	  {stimulus: 'few bud ban fit', data: {cond: 'PX-WO', stimulus: 'few bud ban fit'}},
+	  {stimulus: 'bun way wet bid', data: {cond: 'PX-WO', stimulus: 'bun way wet bid'}},
+	  {stimulus: 'him rave rob hut', data: {cond: 'PX-NW', stimulus: 'him rave rob hut'}},
+	  {stimulus: 'tank fed fig top', data: {cond: 'PX-NW', stimulus: 'tank fed fig top'}},
+	  {stimulus: 'ray pull pet rod', data: {cond: 'PX-NW', stimulus: 'ray pull pet rod'}},
+	  {stimulus: 'gas pro pen gut', data: {cond: 'PX-NW', stimulus: 'gas pro pen gut'}},
+	  {stimulus: 'ten hill ham tub', data: {cond: 'PX-NW', stimulus: 'ten hill ham tub'}},
+	  {stimulus: 'bird tuck tool beam', data: {cond: 'PX-NW', stimulus: 'bird tuck tool beam'}},
+	  {stimulus: 'pit hung hood pear', data: {cond: 'PX-NW', stimulus: 'pit hung hood pear'}},
+	  {stimulus: 'try long like tame', data: {cond: 'PX-WO', stimulus: 'try long like tame'}},
+	  {stimulus: 'push bot bike pale', data: {cond: 'PX-NW', stimulus: 'push bot bike pale'}},
+	  {stimulus: 'mug root rice make', data: {cond: 'PX-WO', stimulus: 'mug root rice make'}},
+	  {stimulus: 'weep surf sole wake', data: {cond: 'PX-NW', stimulus: 'weep surf sole wake'}},
+	  {stimulus: 'sub toy tile sane', data: {cond: 'PX-NW', stimulus: 'sub toy tile sane'}},
+	  {stimulus: 'run mat mole rise', data: {cond: 'PX-WO', stimulus: 'run mat mole rise'}},
+	  {stimulus: 'low rush rite lace', data: {cond: 'PX-WO', stimulus: 'low rush rite lace'}},
+	  {stimulus: 'past rung rode pike', data: {cond: 'PX-NW', stimulus: 'past rung rode pike'}},
+	  {stimulus: 'bull mix mode bane', data: {cond: 'PX-NW', stimulus: 'bull mix mode bane'}},
+      ],
+
+      [
+	  // GROUP 4
+	  {stimulus: 'bird tuck teal beam', data: {cond: 'PC-NW', stimulus: 'bird tuck teal beam'}},
+	  {stimulus: 'pit hung head pear', data: {cond: 'PC-NW', stimulus: 'pit hung head pear'}},
+	  {stimulus: 'try long lake tame', data: {cond: 'PC-WO', stimulus: 'try long lake tame'}},
+	  {stimulus: 'push bot bake pale', data: {cond: 'PC-NW', stimulus: 'push bot bake pale'}},
+	  {stimulus: 'mug root race make', data: {cond: 'PC-WO', stimulus: 'mug root race make'}},
+	  {stimulus: 'weep surf sale wake', data: {cond: 'PC-WO', stimulus: 'weep surf sale wake'}},
+	  {stimulus: 'sub toy tale sane', data: {cond: 'PC-WO', stimulus: 'sub toy tale sane'}},
+	  {stimulus: 'run mat mile rise', data: {cond: 'PC-WO', stimulus: 'run mat mile rise'}},
+	  {stimulus: 'low rush rate lace', data: {cond: 'PC-WO', stimulus: 'low rush rate lace'}},
+	  {stimulus: 'past rung ride pike', data: {cond: 'PC-NW', stimulus: 'past rung ride pike'}},
+	  {stimulus: 'bull mix made bane', data: {cond: 'PC-NW', stimulus: 'bull mix made bane'}},
+	  {stimulus: 'ball dorm duck bust', data: {cond: 'PC-WO', stimulus: 'ball dorm duck bust'}},
+	  {stimulus: 'rum dock dish ring', data: {cond: 'PC-NW', stimulus: 'rum dock dish ring'}},
+	  {stimulus: 'fun peg pick fist', data: {cond: 'PC-NW', stimulus: 'fun peg pick fist'}},
+	  {stimulus: 'day meek must dull', data: {cond: 'PC-WO', stimulus: 'day meek must dull'}},
+	  {stimulus: 'fry bang boot fool', data: {cond: 'PC-NW', stimulus: 'fry bang boot fool'}},
+	  {stimulus: 'pig dawn doom pool', data: {cond: 'PC-NW', stimulus: 'pig dawn doom pool'}},
+	  {stimulus: 'sip fax food soon', data: {cond: 'PC-NW', stimulus: 'sip fax food soon'}},
+	  {stimulus: 'lump fawn foot look', data: {cond: 'PC-NW', stimulus: 'lump fawn foot look'}},
+	  {stimulus: 'may rid roof moot', data: {cond: 'PC-NW', stimulus: 'may rid roof moot'}},
+	  {stimulus: 'less bye bout loud', data: {cond: 'PC-NW', stimulus: 'less bye bout loud'}},
+	  {stimulus: 'lush mitt moon loop', data: {cond: 'PC-NW', stimulus: 'lush mitt moon loop'}},
+	  {stimulus: 'bad nip net bug', data: {cond: 'PX-WO', stimulus: 'bad nip net bug'}},
+	  {stimulus: 'hold tug tan hip', data: {cond: 'PX-NW', stimulus: 'hold tug tan hip'}},
+	  {stimulus: 'cut milk map cob', data: {cond: 'PX-WO', stimulus: 'cut milk map cob'}},
+	  {stimulus: 'cry pug pad cot', data: {cond: 'PX-WO', stimulus: 'cry pug pad cot'}},
+	  {stimulus: 'dew lap lit dog', data: {cond: 'PX-NW', stimulus: 'dew lap lit dog'}},
+	  {stimulus: 'fuzz howl has fin', data: {cond: 'PX-NW', stimulus: 'fuzz howl has fin'}},
+	  {stimulus: 'let curb can log', data: {cond: 'PX-NW', stimulus: 'let curb can log'}},
+	  {stimulus: 'week fur fall wish', data: {cond: 'PX-WO', stimulus: 'week fur fall wish'}},
+	  {stimulus: 'lid men math lock', data: {cond: 'PX-NW', stimulus: 'lid men math lock'}},
+	  {stimulus: 'man set sick mull', data: {cond: 'PX-NW', stimulus: 'man set sick mull'}},
+	  {stimulus: 'born leg last buck', data: {cond: 'PX-NW', stimulus: 'born leg last buck'}},
+	  {stimulus: 'cow bill but cap', data: {cond: 'PX-WO', stimulus: 'cow bill but cap'}},
+	  {stimulus: 'rib mess mud rag', data: {cond: 'PX-NW', stimulus: 'rib mess mud rag'}},
+	  {stimulus: 'bond sum sit bag', data: {cond: 'PX-WO', stimulus: 'bond sum sit bag'}},
+	  {stimulus: 'pry hem hit pan', data: {cond: 'PX-WO', stimulus: 'pry hem hit pan'}},
+	  {stimulus: 'few bud bin fat', data: {cond: 'PX-WO', stimulus: 'few bud bin fat'}},
+	  {stimulus: 'bun way wit bed', data: {cond: 'PX-WO', stimulus: 'bun way wit bed'}},
+	  {stimulus: 'him rave rub hot', data: {cond: 'PX-WO', stimulus: 'him rave rub hot'}},
+	  {stimulus: 'tank fed fog tip', data: {cond: 'PX-NW', stimulus: 'tank fed fog tip'}},
+	  {stimulus: 'ray pull pot red', data: {cond: 'PX-WO', stimulus: 'ray pull pot red'}},
+	  {stimulus: 'gas pro pun get', data: {cond: 'PX-WO', stimulus: 'gas pro pun get'}},
+	  {stimulus: 'ten hill hum tab', data: {cond: 'PX-NW', stimulus: 'ten hill hum tab'}},
+      ],
+
+  ];
+
+
+  // set up the various parts we need for one tonguetwister
+  ////////////////////////////////////////////////////////////////////
+  
+  // fixation point (start of trial)
+  var fixation = {
+      type: 'html-keyboard-response',
+      stimulus: '<div style="font-size:60px;">READY?</div>',
+      choices: jsPsych.NO_KEYS,
+      trial_duration: 1500
+  }
+
+  // these are the other components of the tonguetwister entry
+  // note "post_trial_gap" which blanks the screen for 200 ms
+
+  
+  // type in the tonguetwister twice with prompt (learn it)
+  var type1 = {
+      type: 'survey-text-keylog',
+      prompt: jsPsych.timelineVariable('stimulus'),
+      trial_duration: 5000,
+      data: jsPsych.timelineVariable('data'),
+      name: 'type1',
+      post_trial_gap: 200
+  };
+
+  var type2 = {
+      type: 'survey-text-keylog',
+      prompt: jsPsych.timelineVariable('stimulus'),
+      trial_duration: 5000,
+      data: jsPsych.timelineVariable('data'),
+      name: 'type2',
+      post_trial_gap: 200
+  };
+
+  // type in the tonguetwister once with no prompt (experimental)
+  var type3 = {
+      type: 'survey-text-keylog',
+      prompt: '',
+      name: 'TYPE3',
+      trial_duration: 5000,
+      data: jsPsych.timelineVariable('data'),
+  };
+
+  // here's everything you need to do for one tonguetwister
+  // note also "randomize_order" which will ensure that the stimuli
+  // are in random order
+
+  // main procedure
+  var type_procedure = {
+      timeline: [fixation, type1, type2, type3],
+      timeline_variables: test_stimuli[group-1],
+      randomize_order: true
+  }
+
+  // practice procedure
+  var prac_procedure = {
+      timeline: [fixation, type1, type2, type3],
+      timeline_variables: practice_stimuli,
+      randomize_order: false
+  }
+
+  // initial questions
+  ///////////////////////////////////////////////////////////
+
+  var qp1 = {
+      type: 'survey-text',
+      preamble: '<h2>About You</h2>',
+      questions: [
+	  {prompt:'You may optionally create an anonymous ID in case you would like to contact us about your data',
+	   placeholder: 'ID',
+	   name: 'subject_anon-id'},
+	  {prompt: 'What is your age in years?',
+	   columns: 3,
+	   required: true,
+	   name: 'subject_age',
+	  },
+	  {prompt: 'Which country do you normally live in?',
+	   required: true,
+	   name: 'subject_country',
+	  },
+	  {prompt: 'What is/are the languages you first spoke?',
+	   required: true,
+	   name: 'subject_native_lang',
+	  },
+	  {prompt: 'Please list any other languages you speak fluently',
+	   name: 'subject_other_lang',
+	  },
+	  {prompt: 'What is your gender (e.g., male, female, nonbinary)?',
+	   name: 'subject_gender',
+	  }
+      ]
+  };
+
+  var hand = {
+      type: 'survey-multi-choice',
+      preamble:'one last question',
+      questions: [
+        {prompt:'Are you right-handed, left-handed or ambidexturous?',
+         options: ['Left-handed', 'Ambidexturous', 'Right-handed'],
+          horizontal: true,
+          required: true,
+          name: 'subject_handed',
+    }],
+  };
+
+  
+  // final questions
+
+  var ts1 = {
+      type: 'survey-multi-choice',
+      preamble: 'About your typing',
+      questions: [
+	  {prompt: 'What is your most common/typical typing style?',
+           options: ['Touch Typing (taught typing style, type while looking at the screen)', 'Hunt and Peck (type one by one, looks at keyboard while typing)',
+		     'Buffering (memorizes what to write and then types)', 'Thumbing(uses thumbs to type: usually on mobile devices)', 'Other'],
+           horizontal: false,
+           required: true,
+	   name: 'subject_typing-style'
+	  }],
+  };
+
+  var ts1b = {
+      type: 'survey-text-keylog',
+      preamble: 'About your keyboard',
+      prompt: 'Starting just to the right of the TAB key, please type the first six letters on your keyboard',
+      name: 'subject_keyboard',
+  }
+  
+  
+  var scaleA = ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'];
+
+
+  
+  var ts2= {
+      type: 'survey-likert',
+      questions: [
+          {prompt:'I typically make many mistakes when typing', name: 'subject_mistakes', labels: scaleA, required: true},
+          {prompt:'Today I made more typing mistakes than usual', name:
+	   'subject_today-mistakes', labels: scaleA, required: true},
+	  {prompt:'Today I was speaking aloud while typing', name:
+	   'subject_speak-aloud', labels: scaleA, required: true}
+      ],
+  };
+
+  
+  
+  // set up other components of the experiment (instructions,
+  // etc.)
+  /////////////////////////////////////////////////////////////
+
+  // welcome screen
+  var welcome = {
+      type: 'html-button-response',
+      stimulus:'<div style="font-size:40px; justify-content: center; height:10cm; display: flex; align-items: center;">Welcome to this experiment!</div>',
+    choices:['continue']
+  };
+  
+  // consent form (uses approach on
+  // https://www.jspsych.org/plugins/jspsych-external-html/)
+  var check_consent = function(elem) {
+      if (document.getElementById('consent_checkbox').checked) {
+	  return true;
+      } else {
+	  alert("If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'");
+	  return false;
+      }
+      return false;
+  };
+
+  var consent = {
+      type: 'external-html',
+      url: 'consent.html',
+      cont_btn: 'start',
+      check_fn: check_consent
+  };
+  
+  // instructions
+  var instructions1 = {
+      type: 'instructions',
+      pages: [
+	  'This experiment has three parts.',
+	  'First, we will ask you a couple of questions about yourself.',
+	  'In the main part of the experiment, we will ask you to type short phrases into a response box.',
+	  'Finally, there are a couple more questions related to the experiment.',
+	  'Click Next to answer the first set of questions.'
+      ],
+      show_clickable_nav: true
+  }
+
+  var instructions2 = {
+      type: 'instructions',
+      pages: [
+	  'In the next part of the experiment, you will see some four-word phrases.',
+	  'Your job is to type them into the textbox below as quickly and accurately as possible.',
+	  'You will type each phrase three times.',
+	  'The first two times, the phrase will be above the text box; the third time, you should type from memory.',
+	  'Just type the phrases as well as you can, and hit RETURN at the end.',
+	  'This is the practice session, so you can get used to how things work.',
+	  'Click Next to start.'
+      ],
+      show_clickable_nav: true
+  }
+
+  var instructions3 = {
+      type: 'instructions',
+      pages: [
+	  'That was the end of the practice session.',
+	  'Now the experiment proper starts.',
+	  'Once you have completed typing the four-word phrases, there will be a couple more questions.',
+	  'Click Next to start.'
+      ],
+      show_clickable_nav: true
+  }
+
+  var instructions4 = {
+      type: 'instructions',
+      pages: [
+	  'Thank you.  No more typing!',
+	  'Click Next for a couple of final questions.'
+      ],
+      show_clickable_nav: true,
+  }
+
+  //Debrief
+  var debrief = {
+    type: 'html-button-response',
+    stimulus:'<h2>Thank you for your participation in this experiment!</h2>'+
+    '<br/>'+
+	  '<div align="left">'+
+	  '<p>We are interested in knowing whether the errors people typically make when speaking carry over into typing. '+
+	  'Speakers typically make errors which make real words (more likely to say "top" than "gop" instead of "cop") '+
+	  'and they are more likely to exchange speech sounds which are similar ("g" more likely to become "k" than "l", say). '+
+	  'Our materials are carefully designed so that some of them have similar-sounding onsets (first sounds) and some don\'t; '+
+	  'and that some errors will result in real words and some won\'t.</p>'+
+  '<br/><p>If you have any questions about this study, please contact me:</p>'+
+
+  '<br/><br/><p>Rachael Bryant: <a href="mailto:s1961419@ed.ac.uk">s1961419@ed.ac.uk</a></p>'+
+  '<br/>'+
+  '<p>Finally, we urge you not to discuss this study with anyone else who is currently participating or might participate at a future point in time in case it affects their typing when they take part.</p>'+
+  '<br/>'+
+  '<p>Again,'+
+  '<br/>Thank you!</p></div>',
+    choices: ['Click any key to exit the experiment.']
+  };
+
+  // and here's the timeline
+  /////////////////////////////////////////////////////////////////
+
+  timeline.push(welcome,consent,fullscreen,instructions1,qp1,hand,instructions2,prac_procedure,instructions3,type_procedure,instructions4,ts1,ts1b,ts2,debrief,offscreen);
+
+  // start the experiment
+  jsPsych.init({
+      timeline: timeline,
+      on_finish: function() {
+	  saveData("DATA_".concat(subject_id),jsPsych.data.get().csv());
+	  document.write('<br/><br/>&nbsp;&nbsp;&nbsp;<p>you may now close this window</p>');
+      }
+  });
+  
+  
+</script>
+</html>
